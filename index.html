@@ -33,6 +33,7 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         padding: 40px;
         text-align: center;
+        min-height: 400px;
       }
       .photo img {
         width: 180px;
@@ -58,15 +59,31 @@
         margin-top: 20px;
       }
       .card {
-        background: #f3f4f6;
+        background: #e0e7ff;
         padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        border: 1px solid #2563eb;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         transition: 0.3s;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #111827;
       }
       .card:hover {
-        background: #e0e7ff;
+        background: #c7d2fe;
         transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      }
+      button.card {
+        width: 100%;
+        font-family: inherit;
+        font-size: inherit;
+        border: none;
+        background: inherit;
+        padding: 20px;
+        border-radius: 12px;
+        cursor: pointer;
       }
       footer {
         margin-top: 40px;
@@ -74,6 +91,25 @@
         color: #6b7280;
         font-size: 0.9rem;
         padding: 20px;
+      }
+      .thankyou {
+        display: none;
+        text-align: center;
+        padding: 50px;
+        background-color: #f3f4f6;
+        border-radius: 12px;
+        max-width: 600px;
+        margin: 50px auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      }
+      .thankyou h2 {
+        font-size: 2rem;
+        color: #2563eb;
+        margin-bottom: 20px;
+      }
+      .thankyou p {
+        font-size: 1.1rem;
+        color: #4b5563;
       }
     </style>
   </head>
@@ -85,9 +121,8 @@
       </div>
     </header>
 
-    <main>
+    <main id="main-content">
       <div class="photo">
-        <!-- Substitua o nome do arquivo abaixo pela sua imagem -->
         <img src="suafoto.jpeg" alt="Foto de Pedro Henrique Dourado Leandro" />
       </div>
 
@@ -99,33 +134,44 @@
       </p>
 
       <div class="benefits">
-        <div class="card">💋 <strong>Beijos</strong></div>
-        <div class="card">🤗 <strong>Abraços</strong></div>
-        <div class="card">💞 <strong>Carinhos</strong></div>
-        <div class="card">😜 <strong>Cutucadas</strong></div>
+        <button class="card" onclick="enviarBeneficio('Beijos')">💋 <strong>Beijos</strong></button>
+        <button class="card" onclick="enviarBeneficio('Abraços')">🤗 <strong>Abraços</strong></button>
+        <button class="card" onclick="enviarBeneficio('Carinhos')">💞 <strong>Carinhos</strong></button>
+        <button class="card" onclick="enviarBeneficio('Cutucadas')">😜 <strong>Cutucadas</strong></button>
       </div>
-
-      <footer>
-        Para selecionar benefícios, envie um e-mail para <br />
-        <a
-          href="mailto:pedrodourado1108@gmail.com"
-          style="color: #2563eb; text-decoration: none; font-weight: 500"
-          >pedrodourado1108@gmail.com</a
-        >
-        <br /><br />
-        ©
-        <script>
-          document.write(new Date().getFullYear());
-        </script>
-        Afeto Corporation. Todos os direitos reservados.
-      </footer>
     </main>
+
+    <div class="thankyou" id="thankyou-screen">
+      <h2>Obrigado pela sua escolha!</h2>
+      <p>Seu benefício foi registrado com sucesso. 💌</p>
+    </div>
+
+    <footer>
+      ©
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      Afeto Corporation. Todos os direitos reservados.
+    </footer>
+
+    <script>
+      function enviarBeneficio(beneficio) {
+        const formData = new FormData();
+        formData.append('beneficio', 'Eu quero: ' + beneficio);
+
+        fetch('https://formspree.io/f/mzzkgeqp', {  // <- URL atualizada
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).then(response => {
+          document.getElementById('main-content').style.display = 'none';
+          document.getElementById('thankyou-screen').style.display = 'block';
+        }).catch(error => {
+          alert('Ocorreu um erro. Tente novamente!');
+        });
+      }
+    </script>
   </body>
 </html>
-
-<!-- 📝 INSTRUÇÕES PARA USO:
-1. Baixe este arquivo como index.html
-2. Coloque-o em uma pasta.
-3. Salve sua imagem (a mesma que enviou) na mesma pasta e renomeie para: sua_foto.png
-4. Abra o arquivo index.html no navegador e o site estará completo.
-5. Se quiser mudar o e-mail ou nomes, edite o texto diretamente no código acima. -->
